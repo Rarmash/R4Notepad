@@ -7,13 +7,13 @@ import src.themeslib as themeslib
 import os
 
 def change_theme(theme):
-    text_fild['bg'] = themeslib.themes[theme]['text_bg']
-    text_fild['fg'] = themeslib.themes[theme]['text_fg']
-    text_fild['insertbackground'] = themeslib.themes[theme]['cursor']
-    text_fild['selectbackground'] = themeslib.themes[theme]['select_bg']
+    text_field['bg'] = themeslib.themes[theme]['text_bg']
+    text_field['fg'] = themeslib.themes[theme]['text_fg']
+    text_field['insertbackground'] = themeslib.themes[theme]['cursor']
+    text_field['selectbackground'] = themeslib.themes[theme]['select_bg']
 
 def change_fonts(fontss):
-    text_fild['font'] = fontslib.fonts[fontss]['font']
+    text_field['font'] = fontslib.fonts[fontss]['font']
 
 def notepad_exit():
     answer = messagebox.askokcancel('Выход', 'Вы точно хотите выйти?')
@@ -22,7 +22,7 @@ def notepad_exit():
 
 def new_file():
     root.title("Безымянный — R4Notepad")
-    text_fild.delete('1.0', END)
+    text_field.delete('1.0', END)
 
 def open_file():
     file_path = filedialog.askopenfilename(title='Выбор файла', defaultextension=".txt",
@@ -30,8 +30,8 @@ def open_file():
                                         ("Text Documents","*.txt")])
     if file_path:
         root.title(os.path.basename(file_path) + " — R4Notepad")
-        text_fild.delete('1.0', END)
-        text_fild.insert('1.0', open(file_path, encoding='utf-8').read())
+        text_field.delete('1.0', END)
+        text_field.insert('1.0', open(file_path, encoding='utf-8').read())
 
 def save_file():
     file_path = filedialog.asksaveasfilename(initialfile='Untitled.txt',
@@ -39,7 +39,7 @@ def save_file():
                                             filetypes=[("All Files","*.*"),
                                                 ("Text Documents","*.txt")])
     f = open(file_path, 'w', encoding='utf-8')
-    text = text_fild.get('1.0', END)
+    text = text_field.get('1.0', END)
     f.write(text)
     f.close()
     root.title(os.path.basename(file_path) + " — R4Notepad")
@@ -58,13 +58,13 @@ def about_callback():
     webbrowser.open_new("https://github.com/Rarmash/R4Notepad")
     
 def cut_text():
-    text_fild.event_generate("<<Cut>>")
+    text_field.event_generate("<<Cut>>")
 
 def copy_text():
-    text_fild.event_generate("<<Copy>>")
+    text_field.event_generate("<<Copy>>")
 
 def paste_text():
-    text_fild.event_generate("<<Paste>>")
+    text_field.event_generate("<<Paste>>")
 
 root = Tk()
 root.title('Безымянный — R4Notepad')
@@ -119,7 +119,7 @@ root.config(menu=main_menu)
 f_text = Frame(root)
 f_text.pack(fill=BOTH, expand=1)
 
-text_fild = Text(f_text,
+text_field = Text(f_text,
                  bg='white',
                  fg='black',
                  padx=10,
@@ -131,10 +131,10 @@ text_fild = Text(f_text,
                  width=30,
                  font='Arial 14 bold'
                  )
-text_fild.pack(expand=1, fill=BOTH, side=LEFT)
+text_field.pack(expand=1, fill=BOTH, side=LEFT)
 
-scroll = Scrollbar(f_text, command=text_fild.yview)
+scroll = Scrollbar(f_text, command=text_field.yview)
 scroll.pack(side=LEFT, fill=Y)
-text_fild.config(yscrollcommand=scroll.set)
+text_field.config(yscrollcommand=scroll.set)
 
 root.mainloop()
