@@ -4,13 +4,14 @@ from tkinter import filedialog
 import webbrowser
 import src.fontslib as fontslib
 import src.themeslib as themeslib
-from src.cfgCreate import cfgCreate, changeclr, settings
+from src.cfgCreate import cfgCreate, changeclr
 import os
 
 cfgCreate()
 
 from locales.strings import lang
 from locales.changeLang import *
+from src.getSettings import settings
 
 def change_theme(theme):
     changeclr(theme)

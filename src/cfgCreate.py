@@ -18,8 +18,3 @@ def changeclr(theme):
     with open('settings.ini', "w+") as config_file:
             config.write(config_file)
     config_file.close()
-
-config.read('settings.ini')
-settings = {
-    'theme': config.get("Settings", "theme"),
-}
