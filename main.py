@@ -5,6 +5,8 @@ import webbrowser
 import src.fontslib as fontslib
 import src.themeslib as themeslib
 import os
+from locales.strings import lang
+from locales.changeLang import *
 
 def change_theme(theme):
     text_field['bg'] = themeslib.themes[theme]['text_bg']
@@ -21,7 +23,7 @@ def notepad_exit():
         root.destroy()
 
 def new_file():
-    root.title("Безымянный — R4Notepad")
+    root.title(f"{lang['untitled']} — R4Notepad")
     text_field.delete('1.0', END)
 
 def open_file():
@@ -47,13 +49,39 @@ def save_file():
 def about_menu():
     about_window = Toplevel(root)
     about_window.iconbitmap('img/r4notepad.ico')
-    about_window.title("О программе")
-    about_window.geometry("300x300")
+    about_window.title(lang['about'])
+    img = PhotoImage(file='img/r4notepad_100x100.png')
+    about_window.geometry("300x350")
+    about_window.resizable(width=False, height=False)
     about_name = Label(about_window, text="R4Notepad", font=("Roboto Bold", 20))
-    about_github = Button(about_window, text="Страница проекта на Github", command=about_callback)
+    about_pic = Label(about_window, image=img)
+    about_pic.image = img
+    imggh = PhotoImage(file='img/github.png')
+    about_github = Button(about_window, image=imggh, command=about_callback, borderwidth = 0)
+    about_github.image = imggh
+    about_pic.pack()
     about_name.pack()
     about_github.pack()
 
+def langselect():
+    lang_window = Toplevel(root)
+    lang_window.iconbitmap('img/r4notepad.ico')
+    lang_window.title(lang['langselect'])
+    lang_window.geometry("264x150")
+    lang_window.resizable(width=False, height=False)
+    lang_header = Label(lang_window, text=lang['langselect'], font=("Roboto Bold", 20))
+    lang_header.pack()
+    rus_flag = PhotoImage(file='img/rus_flag.png')
+    en_flag = PhotoImage(file='img/en_flag.png')
+    russian = Button(lang_window, image=rus_flag, command=changerussian, height=66, width=100, borderwidth = 0)
+    russian.image = rus_flag
+    english = Button(lang_window, image=en_flag, command=changeenglish, height=66, width=100, borderwidth = 0)
+    english.image = en_flag
+    russian.pack()
+    russian.place(x=10, y=50)
+    english.pack()
+    english.place(x=150, y=50)
+    
 def about_callback():
     webbrowser.open_new("https://github.com/Rarmash/R4Notepad")
     
@@ -67,7 +95,7 @@ def paste_text():
     text_field.event_generate("<<Paste>>")
 
 root = Tk()
-root.title('Безымянный — R4Notepad')
+root.title(f'{lang["untitled"]} — R4Notepad')
 root.geometry('600x400')
 root.iconbitmap('img/r4notepad.ico')
 
@@ -75,29 +103,30 @@ main_menu = Menu(root)
 
 # Файл
 file_menu = Menu(main_menu, tearoff=0)
-file_menu.add_command(label='Новый файл', command=new_file)
-file_menu.add_command(label='Открыть', command=open_file)
-file_menu.add_command(label='Сохранить', command=save_file)
+file_menu.add_command(label=lang['new_file'], command=new_file)
+file_menu.add_command(label=lang['open_file'], command=open_file)
+file_menu.add_command(label=lang['save_file'], command=save_file)
 file_menu.add_separator()
-file_menu.add_command(label='Закрыть', command=notepad_exit)
+file_menu.add_command(label=lang['close_file'], command=notepad_exit)
 root.config(menu=file_menu)
 
 edit_menu = Menu(main_menu, tearoff=0)
-edit_menu.add_command(label='Вырезать', command=cut_text)
-edit_menu.add_command(label='Копировать', command=copy_text)
-edit_menu.add_command(label='Вставить', command=paste_text)
+edit_menu.add_command(label=lang['cut_text'], command=cut_text)
+edit_menu.add_command(label=lang['copy_text'], command=copy_text)
+edit_menu.add_command(label=lang['paste_text'], command=paste_text)
 
 # Вид
 view_menu = Menu(main_menu, tearoff=0)
 view_menu_sub = Menu(view_menu, tearoff=0)
 font_menu_sub = Menu(view_menu, tearoff=0)
-view_menu_sub.add_command(label='Тёмная', command=lambda: change_theme('dark'))
-view_menu_sub.add_command(label='Светлая', command=lambda: change_theme('light'))
-view_menu.add_cascade(label='Тема', menu=view_menu_sub)
+view_menu_sub.add_command(label=lang['dark_theme'], command=lambda: change_theme('dark'))
+view_menu_sub.add_command(label=lang['light_theme'], command=lambda: change_theme('light'))
+view_menu.add_cascade(label=lang['theme'], menu=view_menu_sub)
 
 # Настройки
 settings_menu = Menu(main_menu, tearoff=0)
-settings_menu.add_command(label='О программе', command=about_menu)
+settings_menu.add_command(label=lang['about'], command=about_menu)
+settings_menu.add_command(label=lang['langselect'], command=langselect)
 
 font_menu_sub.add_command(label='Arial', command=lambda: change_fonts('Arial'))
 font_menu_sub.add_command(label='Comic Sans MS', command=lambda: change_fonts('CSMS'))
@@ -106,14 +135,14 @@ font_menu_sub.add_command(label='System', command=lambda: change_fonts('System')
 font_menu_sub.add_command(label='Script', command=lambda: change_fonts('Script'))
 font_menu_sub.add_command(label='Segoe UI', command=lambda: change_fonts('Segoe UI'))
 font_menu_sub.add_command(label='Segoe Script', command=lambda: change_fonts('Segoe Script'))
-view_menu.add_cascade(label='Шрифт...', menu=font_menu_sub)
+view_menu.add_cascade(label=lang['font'] + '...', menu=font_menu_sub)
 root.config(menu=view_menu)
 
 # Добавление списков меню
-main_menu.add_cascade(label='Файл', menu=file_menu)
-main_menu.add_cascade(label='Редактировать', menu=edit_menu)
-main_menu.add_cascade(label='Вид', menu=view_menu)
-main_menu.add_cascade(label='Настройки', menu=settings_menu)
+main_menu.add_cascade(label=lang['file'], menu=file_menu)
+main_menu.add_cascade(label=lang['edit'], menu=edit_menu)
+main_menu.add_cascade(label=lang['view'], menu=view_menu)
+main_menu.add_cascade(label=lang['settings'], menu=settings_menu)
 root.config(menu=main_menu)
 
 f_text = Frame(root)
