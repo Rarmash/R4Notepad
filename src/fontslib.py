@@ -7,5 +7,11 @@ fonts = {
     },
     'TNR': {
         'font': ('Times New Roman', 14, 'bold')
+    },
+    'System': {
+        'font': ('System', 14, 'bold')
+    },
+    'Script': {
+        'font': ('Script', 14, 'bold')
     }
 }

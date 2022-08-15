@@ -79,6 +79,8 @@ settings_menu.add_command(label='О программе', command=about_menu)
 font_menu_sub.add_command(label='Arial', command=lambda: change_fonts('Arial'))
 font_menu_sub.add_command(label='Comic Sans MS', command=lambda: change_fonts('CSMS'))
 font_menu_sub.add_command(label='Times New Roman', command=lambda: change_fonts('TNR'))
+font_menu_sub.add_command(label='System', command=lambda: change_fonts('System'))
+font_menu_sub.add_command(label='Script', command=lambda: change_fonts('Script'))
 view_menu.add_cascade(label='Шрифт...', menu=font_menu_sub)
 root.config(menu=view_menu)
 
