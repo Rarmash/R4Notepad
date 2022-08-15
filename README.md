@@ -13,5 +13,5 @@ cd R4Notepad
 ```
 3. Run Python file:
 ```BASH
-python main.py
+python main.pyw
 ```
