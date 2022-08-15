@@ -4,6 +4,7 @@ from tkinter import filedialog
 import webbrowser
 import src.fontslib as fontslib
 import src.themeslib as themeslib
+import os
 
 def change_theme(theme):
     text_fild['bg'] = themeslib.themes[theme]['text_bg']
@@ -11,30 +12,33 @@ def change_theme(theme):
     text_fild['insertbackground'] = themeslib.themes[theme]['cursor']
     text_fild['selectbackground'] = themeslib.themes[theme]['select_bg']
 
-
 def change_fonts(fontss):
     text_fild['font'] = fontslib.fonts[fontss]['font']
-
 
 def notepad_exit():
     answer = messagebox.askokcancel('Выход', 'Вы точно хотите выйти?')
     if answer:
         root.destroy()
 
-
 def open_file():
-    file_path = filedialog.askopenfilename(title='Выбор файла', filetypes=(('Текстовые документы (*.txt)', '*.txt'), ('Все файлы', '*.*')))
+    file_path = filedialog.askopenfilename(title='Выбор файла', defaultextension=".txt",
+                                      filetypes=[("All Files","*.*"),
+                                        ("Text Documents","*.txt")])
     if file_path:
+        root.title(os.path.basename(file_path) + " — R4Notepad")
         text_fild.delete('1.0', END)
         text_fild.insert('1.0', open(file_path, encoding='utf-8').read())
 
-
 def save_file():
-    file_path = filedialog.asksaveasfilename(filetypes=(('Текстовые документы (*.txt)', '*.txt'), ('Все файлы', '*.*')))
+    file_path = filedialog.asksaveasfilename(initialfile='Untitled.txt',
+                                            defaultextension=".txt",
+                                            filetypes=[("All Files","*.*"),
+                                                ("Text Documents","*.txt")])
     f = open(file_path, 'w', encoding='utf-8')
     text = text_fild.get('1.0', END)
     f.write(text)
     f.close()
+    root.title(os.path.basename(file_path) + " — R4Notepad")
 
 def about_menu():
     about_window = Toplevel(root)
@@ -48,10 +52,19 @@ def about_menu():
 
 def about_callback():
     webbrowser.open_new("https://github.com/Rarmash/R4Notepad")
+    
+def cut_text():
+    text_fild.event_generate("<<Cut>>")
+
+def copy_text():
+    text_fild.event_generate("<<Copy>>")
+
+def paste_text():
+    text_fild.event_generate("<<Paste>>")
 
 root = Tk()
-root.title('R4Notepad')
-root.geometry('300x400')
+root.title('Безымянный — R4Notepad')
+root.geometry('600x400')
 root.iconbitmap('img/r4notepad.ico')
 
 main_menu = Menu(root)
@@ -63,6 +76,11 @@ file_menu.add_command(label='Сохранить', command=save_file)
 file_menu.add_separator()
 file_menu.add_command(label='Закрыть', command=notepad_exit)
 root.config(menu=file_menu)
+
+edit_menu = Menu(main_menu, tearoff=0)
+edit_menu.add_command(label='Вырезать', command=cut_text)
+edit_menu.add_command(label='Копировать', command=copy_text)
+edit_menu.add_command(label='Вставить', command=paste_text)
 
 # Вид
 view_menu = Menu(main_menu, tearoff=0)
@@ -86,6 +104,7 @@ root.config(menu=view_menu)
 
 # Добавление списков меню
 main_menu.add_cascade(label='Файл', menu=file_menu)
+main_menu.add_cascade(label='Редактировать', menu=edit_menu)
 main_menu.add_cascade(label='Вид', menu=view_menu)
 main_menu.add_cascade(label='Настройки', menu=settings_menu)
 root.config(menu=main_menu)
