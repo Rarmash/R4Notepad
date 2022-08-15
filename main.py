@@ -4,11 +4,16 @@ from tkinter import filedialog
 import webbrowser
 import src.fontslib as fontslib
 import src.themeslib as themeslib
+from src.cfgCreate import cfgCreate, changeclr, settings
 import os
+
+cfgCreate()
+
 from locales.strings import lang
 from locales.changeLang import *
 
 def change_theme(theme):
+    changeclr(theme)
     text_field['bg'] = themeslib.themes[theme]['text_bg']
     text_field['fg'] = themeslib.themes[theme]['text_fg']
     text_field['insertbackground'] = themeslib.themes[theme]['cursor']
@@ -61,16 +66,17 @@ def save_as(Event=False):
 
 def about_menu():
     about_window = Toplevel(root)
+    about_window.configure(bg=themeslib.themes[theme]['text_bg'])
     about_window.iconbitmap('img/r4notepad.ico')
     about_window.title(lang['about'])
     img = PhotoImage(file='img/r4notepad_100x100.png')
     about_window.geometry("300x350")
     about_window.resizable(width=False, height=False)
-    about_name = Label(about_window, text="R4Notepad", font=("Roboto Bold", 20))
-    about_pic = Label(about_window, image=img)
+    about_name = Label(about_window, text="R4Notepad", font=("Roboto Bold", 20), bg=themeslib.themes[theme]['text_bg'], fg=themeslib.themes[theme]['text_fg'])
+    about_pic = Label(about_window, image=img, bg=themeslib.themes[theme]['text_bg'])
     about_pic.image = img
     imggh = PhotoImage(file='img/github.png')
-    about_github = Button(about_window, image=imggh, command=about_callback, borderwidth = 0)
+    about_github = Button(about_window, image=imggh, command=about_callback, borderwidth = 0, bg=themeslib.themes[theme]['text_bg'])
     about_github.image = imggh
     about_pic.pack()
     about_name.pack()
@@ -82,13 +88,14 @@ def langselect():
     lang_window.title(lang['langselect'])
     lang_window.geometry("264x150")
     lang_window.resizable(width=False, height=False)
-    lang_header = Label(lang_window, text=lang['langselect'], font=("Roboto Bold", 20))
+    lang_window.configure(bg=themeslib.themes[theme]['text_bg'])
+    lang_header = Label(lang_window, text=lang['langselect'], font=("Roboto Bold", 20), bg=themeslib.themes[theme]['text_bg'], fg=themeslib.themes[theme]['text_fg'])
     lang_header.pack()
     rus_flag = PhotoImage(file='img/rus_flag.png')
     en_flag = PhotoImage(file='img/en_flag.png')
-    russian = Button(lang_window, image=rus_flag, command=changerussian, height=66, width=100, borderwidth = 0)
+    russian = Button(lang_window, image=rus_flag, command=changerussian, height=66, width=100, borderwidth = 0, bg=themeslib.themes[theme]['text_bg'])
     russian.image = rus_flag
-    english = Button(lang_window, image=en_flag, command=changeenglish, height=66, width=100, borderwidth = 0)
+    english = Button(lang_window, image=en_flag, command=changeenglish, height=66, width=100, borderwidth = 0, bg=themeslib.themes[theme]['text_bg'])
     english.image = en_flag
     russian.pack()
     russian.place(x=10, y=50)
@@ -171,14 +178,16 @@ root.config(menu=main_menu)
 f_text = Frame(root)
 f_text.pack(fill=BOTH, expand=1)
 
+theme = settings['theme']
+
 text_field = Text(f_text,
-                 bg='white',
-                 fg='black',
+                 bg=themeslib.themes[theme]['text_bg'],
+                 fg=themeslib.themes[theme]['text_fg'],
                  padx=10,
                  pady=10,
                  wrap=WORD,
-                 insertbackground='brown',
-                 selectbackground='#8D917A',
+                 insertbackground=themeslib.themes[theme]['cursor'],
+                 selectbackground=themeslib.themes[theme]['select_bg'],
                  spacing3=10,
                  width=30,
                  font='Arial 14 bold'

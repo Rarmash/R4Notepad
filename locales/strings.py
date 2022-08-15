@@ -1,13 +1,6 @@
 from configparser import ConfigParser
-import os.path
 
 config = ConfigParser()
-
-if not os.path.exists('settings.ini'):
-    config.add_section("LOCALE")
-    config.set("LOCALE", "language", "EN")
-    with open('settings.ini', "w+") as config_file:
-        config.write(config_file)
 
 config.read("settings.ini")
 language = config.get("LOCALE", "language")
