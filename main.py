@@ -20,6 +20,10 @@ def notepad_exit():
     if answer:
         root.destroy()
 
+def new_file():
+    root.title("Безымянный — R4Notepad")
+    text_fild.delete('1.0', END)
+
 def open_file():
     file_path = filedialog.askopenfilename(title='Выбор файла', defaultextension=".txt",
                                       filetypes=[("All Files","*.*"),
@@ -71,6 +75,7 @@ main_menu = Menu(root)
 
 # Файл
 file_menu = Menu(main_menu, tearoff=0)
+file_menu.add_command(label='Новый файл', command=new_file)
 file_menu.add_command(label='Открыть', command=open_file)
 file_menu.add_command(label='Сохранить', command=save_file)
 file_menu.add_separator()
@@ -99,6 +104,8 @@ font_menu_sub.add_command(label='Comic Sans MS', command=lambda: change_fonts('C
 font_menu_sub.add_command(label='Times New Roman', command=lambda: change_fonts('TNR'))
 font_menu_sub.add_command(label='System', command=lambda: change_fonts('System'))
 font_menu_sub.add_command(label='Script', command=lambda: change_fonts('Script'))
+font_menu_sub.add_command(label='Segoe UI', command=lambda: change_fonts('Segoe UI'))
+font_menu_sub.add_command(label='Segoe Script', command=lambda: change_fonts('Segoe Script'))
 view_menu.add_cascade(label='Шрифт...', menu=font_menu_sub)
 root.config(menu=view_menu)
 

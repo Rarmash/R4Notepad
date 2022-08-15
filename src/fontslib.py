@@ -13,5 +13,11 @@ fonts = {
     },
     'Script': {
         'font': ('Script', 14, 'bold')
+    },
+    'Segoe UI': {
+        'font': ('Segoe UI', 14, 'bold')
+    },
+    'Segoe Script': {
+        'font': ('Segoe Script', 14, 'bold')
     }
 }
