@@ -18,8 +18,8 @@ def change_fonts(fontss):
     text_field['font'] = fontslib.fonts[fontss]['font']
 
 def notepad_exit():
-    answer = messagebox.askokcancel('Выход', 'Вы точно хотите выйти?')
-    if answer:
+    #answer = messagebox.askokcancel('Выход', 'Вы точно хотите выйти?')
+    #if answer:
         root.destroy()
 
 def new_file():
@@ -35,8 +35,8 @@ def open_file():
         text_field.delete('1.0', END)
         text_field.insert('1.0', open(file_path, encoding='utf-8').read())
 
-def save_file():
-    file_path = filedialog.asksaveasfilename(initialfile='Untitled.txt',
+def save_file(Event=False):
+    file_path = filedialog.asksaveasfilename(initialfile=f'{lang["untitled"]}.txt',
                                             defaultextension=".txt",
                                             filetypes=[("All Files","*.*"),
                                                 ("Text Documents","*.txt")])
@@ -98,6 +98,8 @@ root = Tk()
 root.title(f'{lang["untitled"]} — R4Notepad')
 root.geometry('600x400')
 root.iconbitmap('img/r4notepad.ico')
+
+root.bind("<Control-s>", save_file)
 
 main_menu = Menu(root)
 
