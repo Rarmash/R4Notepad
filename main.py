@@ -27,6 +27,7 @@ def new_file():
     text_field.delete('1.0', END)
 
 def open_file():
+    global file_path
     file_path = filedialog.askopenfilename(title='Выбор файла', defaultextension=".txt",
                                       filetypes=[("All Files","*.*"),
                                         ("Text Documents","*.txt")])
@@ -34,8 +35,19 @@ def open_file():
         root.title(os.path.basename(file_path) + " — R4Notepad")
         text_field.delete('1.0', END)
         text_field.insert('1.0', open(file_path, encoding='utf-8').read())
+    text_field.bind("<<Modified>>", onModification)
 
-def save_file(Event=False):
+def save(Event=False):
+    contents = text_field.get('1.0', "end-1c")
+    try:
+        with open(file_path, 'w') as outputFile:
+            outputFile.write(contents)
+        text_field.bind("<<Modified>>", onModification)
+    except:
+        save_as()
+
+def save_as(Event=False):
+    global file_path
     file_path = filedialog.asksaveasfilename(initialfile=f'{lang["untitled"]}.txt',
                                             defaultextension=".txt",
                                             filetypes=[("All Files","*.*"),
@@ -45,6 +57,7 @@ def save_file(Event=False):
     f.write(text)
     f.close()
     root.title(os.path.basename(file_path) + " — R4Notepad")
+    text_field.bind("<<Modified>>", onModification)
 
 def about_menu():
     about_window = Toplevel(root)
@@ -93,13 +106,21 @@ def copy_text():
 
 def paste_text():
     text_field.event_generate("<<Paste>>")
+    
+def onModification(Event=False):
+    pass
+    #try:
+        #root.title(os.path.basename(file_path) + "* — R4Notepad")
+    #except:
+        #root.title(f"{lang['untitled']}* — R4Notepad")
+
 
 root = Tk()
 root.title(f'{lang["untitled"]} — R4Notepad')
 root.geometry('600x400')
 root.iconbitmap('img/r4notepad.ico')
 
-root.bind("<Control-s>", save_file)
+root.bind("<Control-s>", save)
 
 main_menu = Menu(root)
 
@@ -107,7 +128,7 @@ main_menu = Menu(root)
 file_menu = Menu(main_menu, tearoff=0)
 file_menu.add_command(label=lang['new_file'], command=new_file)
 file_menu.add_command(label=lang['open_file'], command=open_file)
-file_menu.add_command(label=lang['save_file'], command=save_file)
+file_menu.add_command(label=lang['save_file'], command=save)
 file_menu.add_separator()
 file_menu.add_command(label=lang['close_file'], command=notepad_exit)
 root.config(menu=file_menu)
@@ -167,5 +188,7 @@ text_field.pack(expand=1, fill=BOTH, side=LEFT)
 scroll = Scrollbar(f_text, command=text_field.yview)
 scroll.pack(side=LEFT, fill=Y)
 text_field.config(yscrollcommand=scroll.set)
+
+text_field.bind("<<Modified>>", onModification)
 
 root.mainloop()
